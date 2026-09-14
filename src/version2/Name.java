@@ -6,9 +6,9 @@ public class Name {
     private String lastName;
 
     public Name() {
-        this.firstName="N/A";
-        this.middleName="N/A";
-        this.lastName="N/A";
+        this.firstName = "N/A";
+        this.middleName = "N/A";
+        this.lastName = "N/A";
     }
 
     public Name(String firstName, String middleName, String lastName) {
@@ -41,5 +41,33 @@ public class Name {
         this.lastName = lastName;
     }
 
+    public String getFullName(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName);
+        if(middleName != null && !middleName.equals("N/A") && !middleName.isEmpty()){
+            sb.append(" ");
+            sb.append(middleName);
+        }
+        sb.append(" ");
+        sb.append(lastName);
+        return sb.toString();
+    }
 
+    public void displayName(){
+        System.out.println("First Name: " + firstName);
+        System.out.println("Middle Name: " + middleName);
+        System.out.println("Last Name: " + lastName);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Name{");
+        sb.append("firstName='").append(firstName).append('\'');
+        sb.append(", middleName='").append(middleName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", fullName=").append(getFullName());
+        sb.append('}');
+        return sb.toString();
+    }
 }

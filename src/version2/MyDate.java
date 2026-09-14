@@ -7,11 +7,12 @@ public class MyDate {
     private int year;
 
     public MyDate() {
-        this.day="N/A";
-        this.month=0;
-        this.date=0;
-        this.year=0;
+        this.day = "N/A";
+        this.month = 0;
+        this.date = 0;
+        this.year = 0;
     }
+
 
     public MyDate(String day, int month, int date, int year) {
         this.day = day;
@@ -52,5 +53,35 @@ public class MyDate {
         this.year = year;
     }
 
+    public String getFormattedDate(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%02d", month));
+        sb.append("/");
+        sb.append(String.format("%02d", date));
+        sb.append("/");
+        sb.append(year);
+        sb.append(" - ");
+        sb.append(day);
+        return sb.toString();
+    }
 
+    public void displayMyDate(){
+        System.out.println("Day: " + day);
+        System.out.println("Month: " + month);
+        System.out.println("Date: " + date);
+        System.out.println("Year: " + year);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("MyDate{");
+        sb.append("day='").append(day).append('\'');
+        sb.append(", month=").append(month);
+        sb.append(", date=").append(date);
+        sb.append(", year=").append(year);
+        sb.append(", formattedDate=").append(getFormattedDate());
+        sb.append('}');
+        return sb.toString();
+    }
 }
