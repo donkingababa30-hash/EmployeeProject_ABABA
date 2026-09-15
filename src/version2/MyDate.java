@@ -1,6 +1,11 @@
 package version2;
 
 public class MyDate {
+    private static final String[] monthNames = {
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    };
+
     private String day;
     private int month;
     private int date;
@@ -13,6 +18,12 @@ public class MyDate {
         this.year = 0;
     }
 
+    public MyDate(int month, int date, int year) {
+        this.day = "N/A";
+        this.month = month;
+        this.date = date;
+        this.year = year;
+    }
 
     public MyDate(String day, int month, int date, int year) {
         this.day = day;
@@ -55,21 +66,33 @@ public class MyDate {
 
     public String getFormattedDate(){
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%02d", month));
-        sb.append("/");
         sb.append(String.format("%02d", date));
-        sb.append("/");
+        sb.append(" ");
+        if(month>=1 && month<=12){
+            sb.append(monthNames[month-1]);
+        }
+        else{
+            sb.append("N/A");
+        }
+        sb.append(" ");
         sb.append(year);
-        sb.append(" - ");
-        sb.append(day);
         return sb.toString();
     }
 
     public void displayMyDate(){
-        System.out.println("Day: " + day);
-        System.out.println("Month: " + month);
-        System.out.println("Date: " + date);
-        System.out.println("Year: " + year);
+        StringBuilder sb = new StringBuilder();
+        System.out.printf("Date: ");
+        sb.append(String.format("%02d", date));
+        sb.append(" ");
+        if(month>=1 && month<=12){
+            sb.append(monthNames[month-1]);
+        }
+        else{
+            sb.append("N/A");
+        }
+        sb.append(" ");
+        sb.append(year);
+        System.out.println(sb.toString());
     }
 
     @Override

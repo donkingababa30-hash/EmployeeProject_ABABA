@@ -4,6 +4,7 @@ public class HourlyEmployee {
     private int empID;
     private Name empName;
     private MyDate hireDate;
+    private MyDate birthDate;
     private float totalHoursWorked;
     private double ratePerHour;
 
@@ -23,10 +24,11 @@ public class HourlyEmployee {
         this.ratePerHour = 0.0;
     }
 
-    public HourlyEmployee(int empID, Name empName, MyDate hireDate, float totalHoursWorked, double ratePerHour) {
+    public HourlyEmployee(int empID, Name empName, MyDate hireDate, MyDate birthDate, float totalHoursWorked, double ratePerHour) {
         this.empID = empID;
         this.empName = empName;
         this.hireDate = hireDate;
+        this.birthDate=birthDate;
         this.totalHoursWorked = totalHoursWorked;
         this.ratePerHour = ratePerHour;
     }
@@ -55,6 +57,14 @@ public class HourlyEmployee {
         this.hireDate = hireDate;
     }
 
+    public MyDate getBirthDate(){
+        return birthDate;
+    }
+
+    public void setBirthDate(){
+        this.birthDate=birthDate;
+    }
+
     public float getTotalHoursWorked() {
         return totalHoursWorked;
     }
@@ -71,44 +81,52 @@ public class HourlyEmployee {
         this.ratePerHour = ratePerHour;
     }
 
-    public double computeSalary(){
+    public double computeSalary(int currentMonth){
+        double totalPayroll;
         if(totalHoursWorked<=0){
-            return 0.0;
+            totalPayroll=0.0;
         }
 
         if(totalHoursWorked<=40){
-            return totalHoursWorked*ratePerHour;
+            totalPayroll=totalHoursWorked*ratePerHour;
         }
         else{
             double regularPay=40*ratePerHour;
             double overtime=totalHoursWorked-40;
             double overtimePay=overtime*(ratePerHour*1.5);
-            return regularPay+overtimePay;
+            totalPayroll=regularPay+overtimePay;
         }
-
+        if(birthDate.getMonth()==currentMonth){
+            return totalPayroll+5000;
+        }
+        else {
+            return totalPayroll;
+        }
     }
 
     public void displayHourlyEmployee(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Employee ID: ").append(empID).append("\n");
-        sb.append("Employee Name: ").append(empName.getFullName()).append("\n");
-        sb.append("Hire Date: ").append(hireDate.getFormattedDate()).append("\n");
-        sb.append("Total Hours Worked: ").append(totalHoursWorked).append("\n");
-        sb.append("Rate Per Hour: ").append(ratePerHour);
+        sb.append("ID: ").append(empID).append(" | ");
+        sb.append("Name: ").append(empName.getFullName()).append(" | ");
+        sb.append("DOB: ").append(birthDate.getFormattedDate()).append(" | ");
+        sb.append("Hired: ").append(hireDate.getFormattedDate()).append(" | ");
+        sb.append("Hours: ").append(totalHoursWorked).append(" | ");
+        sb.append("Rate: ₱").append(ratePerHour).append("/hr");
         System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\nHourlyEmployee{");
-        sb.append("empID=").append(empID);
-        sb.append(", empName=").append(empName.getFullName());
-        sb.append(", hireDate=").append(hireDate.getFormattedDate());
-        sb.append(", totalHoursWorked=").append(totalHoursWorked);
-        sb.append(", ratePerHour=").append(ratePerHour);
-        sb.append(", Total Salary=").append(computeSalary());
-        sb.append('}');
+        sb.append("\nHourlyEmployee[");
+        sb.append("ID:").append(empID);
+        sb.append(", Name:").append(empName.getFullName());
+        sb.append(", DOB:").append(birthDate.getFormattedDate());
+        sb.append(", Hired:").append(hireDate.getFormattedDate());
+        sb.append(", Hours:").append(totalHoursWorked);
+        sb.append(", Rate: ₱").append(ratePerHour);
+        sb.append(", Total Salary: ₱").append(computeSalary(3));
+        sb.append(']');
         return sb.toString();
     }
 }

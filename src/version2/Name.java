@@ -4,6 +4,7 @@ public class Name {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String suffix;
 
     public Name() {
         this.firstName = "N/A";
@@ -11,10 +12,33 @@ public class Name {
         this.lastName = "N/A";
     }
 
+    public Name(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.middleName = "";
+        this.lastName = lastName;
+        this.suffix="";
+    }
+
     public Name(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+        this.suffix="";
+    }
+
+    public Name(String firstName, String middleName, String lastName, String suffix) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.suffix = suffix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public String getFirstName() {
@@ -43,20 +67,21 @@ public class Name {
 
     public String getFullName(){
         StringBuilder sb = new StringBuilder();
+        sb.append(lastName);
+        sb.append(", ");
         sb.append(firstName);
         if(middleName != null && !middleName.equals("N/A") && !middleName.isEmpty()){
             sb.append(" ");
-            sb.append(middleName);
+            sb.append(middleName.charAt(0));
+            sb.append(".");
         }
-        sb.append(" ");
-        sb.append(lastName);
         return sb.toString();
     }
 
-    public void displayName(){
-        System.out.println("First Name: " + firstName);
-        System.out.println("Middle Name: " + middleName);
-        System.out.println("Last Name: " + lastName);
+    public void displayName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Name: ").append(getLastName()).append(", ").append(getFirstName()).append(" ").append(getMiddleName().charAt(0)).append(".");
+        System.out.println(sb.toString());
     }
 
     @Override
