@@ -10,9 +10,10 @@ public class Main2 {
         Name n1 = new Name("Alice", "Marie", "Smith");
         MyDate d1 = new MyDate("Monday", 6, 1, 2022);
         MyDate b1= new MyDate("Monday", 9, 18, 2000);
+        MyDate currentDate=new MyDate(9, 18, 2026);
         HourlyEmployee h1 = new HourlyEmployee(101, n1, d1, b1, 45, 200);
         n1.displayName();
-        b1.displayMyDate();
+        currentDate.displayMyDate();
         h1.displayHourlyEmployee();
         System.out.println(h1);
     }
