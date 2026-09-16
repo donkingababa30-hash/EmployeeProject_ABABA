@@ -1,43 +1,35 @@
 package version3;
 
-public class MyDate {
-    private static final String[] monthNames = {
+import java.util.Objects;
+
+public class MyDate implements Cloneable {
+    private static final String[] MONTH_NAMES = {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
 
-    private String day;
+    private int day;
     private int month;
-    private int date;
     private int year;
 
     public MyDate() {
-        this.day = "N/A";
-        this.month = 0;
-        this.date = 0;
-        this.year = 0;
+        this.day = 1;
+        this.month = 1;
+        this.year = 1900;
     }
 
-    public MyDate(int month, int date, int year) {
-        this.day = "";
-        this.month = month;
-        this.date = date;
+    public MyDate(int month, int day, int year) {
+        setMonth(month);
+        setDay(day);
         this.year = year;
     }
 
-    public MyDate(String day, int month, int date, int year) {
-        this.day = day;
-        this.month = month;
-        this.date = date;
-        this.year = year;
-    }
-
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setDay(int day) {
+        this.day = (day >= 1 && day <= 31) ? day : 1;
     }
 
     public int getMonth() {
@@ -45,15 +37,7 @@ public class MyDate {
     }
 
     public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDate() {
-        return date;
-    }
-
-    public void setDate(int date) {
-        this.date = date;
+        this.month = (month >= 1 && month <= 12) ? month : 1;
     }
 
     public int getYear() {
@@ -64,47 +48,55 @@ public class MyDate {
         this.year = year;
     }
 
-    public String getFormattedDate(){
+    public String getFormattedDate() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%02d", date));
+        sb.append(String.format("%02d", day));
         sb.append(" ");
-        if(month>=1 && month<=12){
-            sb.append(monthNames[month-1]);
-        }
-        else{
-            sb.append("N/A");
-        }
+        sb.append((month >= 1 && month <= 12) ? MONTH_NAMES[month - 1] : "N/A");
         sb.append(" ");
         sb.append(year);
         return sb.toString();
     }
 
-    public void displayMyDate(){
-        StringBuilder sb = new StringBuilder();
-        System.out.printf("Date: ");
-        sb.append(String.format("%02d", date));
-        sb.append(" ");
-        if(month>=1 && month<=12){
-            sb.append(monthNames[month-1]);
-        }
-        else{
-            sb.append("N/A");
-        }
-        sb.append(" ");
-        sb.append(year);
-        System.out.println(sb.toString());
+    public void displayDate() {
+        System.out.println("Date: " + getFormattedDate());
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("MyDate{");
-        sb.append("day='").append(day).append('\'');
+        sb.append("day=").append(day);
         sb.append(", month=").append(month);
-        sb.append(", date=").append(date);
         sb.append(", year=").append(year);
         sb.append(", formattedDate=").append(getFormattedDate());
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof MyDate)) {
+            return false;
+        }
+        MyDate other = (MyDate) obj;
+        return day == other.day && month == other.month && year == other.year;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, month, year);
+    }
+
+    @Override
+    public MyDate clone() {
+        try {
+            return (MyDate) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("MyDate did not implement Cloneable", e);
+        }
     }
 }

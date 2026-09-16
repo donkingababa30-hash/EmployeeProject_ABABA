@@ -1,54 +1,18 @@
 package version3;
 
-public class CommissionEmployee {
-    private int empID;
-    private Name empName;
-    private MyDate hireDate;
+import java.util.Objects;
+
+public class CommissionEmployee extends Employee {
     private double totalSale;
 
     public CommissionEmployee() {
-        this.empID = 0;
-        this.empName = new Name();
-        this.hireDate = new MyDate();
-        this.totalSale = 0;
+        super();
+        this.totalSale = 0.0;
     }
 
-    public CommissionEmployee(int empID, Name empName) {
-        this.empID = empID;
-        this.empName = empName;
-        this.hireDate = new MyDate();
-        this.totalSale = 0;
-    }
-
-    public CommissionEmployee(int empID, Name empName, MyDate hireDate, double totalSale) {
-        this.empID = empID;
-        this.empName = empName;
-        this.hireDate = hireDate;
+    public CommissionEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired, double totalSale) {
+        super(empID, empName, birthDate, dateHired);
         this.totalSale = totalSale;
-    }
-
-    public int getEmpID() {
-        return empID;
-    }
-
-    public void setEmpID(int empID) {
-        this.empID = empID;
-    }
-
-    public Name getEmpName() {
-        return empName;
-    }
-
-    public void setEmpName(Name empName) {
-        this.empName = empName;
-    }
-
-    public MyDate getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(MyDate hireDate) {
-        this.hireDate = hireDate;
     }
 
     public double getTotalSale() {
@@ -56,43 +20,62 @@ public class CommissionEmployee {
     }
 
     public void setTotalSale(double totalSale) {
-        this.totalSale = totalSale;
+        this.totalSale = (totalSale >= 0) ? totalSale : 0;
     }
 
-    public double computeSalary(){
-        if(totalSale>50000 && totalSale<100000){
-            return 0.10*totalSale;
-        }
-        else if(totalSale>100000 && totalSale<500000){
-            return 0.15*totalSale;
-        }
-        else if(totalSale>500000){
-            return 0.20*totalSale;
-        }
-        else{
-            return 0.05*totalSale;
+    public double getCommissionRate() {
+        if (totalSale >= 500000) {
+            return 0.20;
+        } else if (totalSale >= 100000) {
+            return 0.15;
+        } else if (totalSale >= 50000) {
+            return 0.10;
+        } else {
+            return 0.05;
         }
     }
 
-    public void displayCommissionEmployee(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Employee ID: ").append(empID).append("\n");
-        sb.append("Employee Name: ").append(empName.getFullName()).append("\n");
-        sb.append("Hire Date: ").append(hireDate.getFormattedDate()).append("\n");
-        sb.append("Total Sales: ").append(totalSale);
-        System.out.println(sb.toString());
+    @Override
+    public double computeSalary(int currentMonth) {
+        double basePay = totalSale * getCommissionRate();
+        return basePay + super.computeSalary(currentMonth);
+    }
+
+    public void displayCommissionEmployee() {
+        displayEmployee();
+        System.out.printf("Total Sale: ₱%.2f | Commission Rate: %.0f%%%n", totalSale, getCommissionRate() * 100);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CommissionEmployee{");
-        sb.append("empID=").append(empID);
-        sb.append(", empName=").append(empName.getFullName());
-        sb.append(", hireDate=").append(hireDate.getFormattedDate());
-        sb.append(", totalSale=").append(totalSale);
-        sb.append(", Total Salary=").append(computeSalary());
-        sb.append('}');
-        return sb.toString();
+        return String.format(
+                "CommissionEmployee[ID: %d, Name: %s, DOB: %s, Hired: %s, Sale: ₱%.2f, Rate: %.0f%%, Total Salary: ₱%.2f]",
+                getEmpID(), getEmpName().getFullName(), getBirthDate().getFormattedDate(),
+                getDateHired().getFormattedDate(), totalSale, getCommissionRate() * 100, computeSalary());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof CommissionEmployee)) {
+            return false;
+        }
+        CommissionEmployee other = (CommissionEmployee) obj;
+        return Double.compare(totalSale, other.totalSale) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), totalSale);
+    }
+
+    @Override
+    public CommissionEmployee clone() {
+        return (CommissionEmployee) super.clone();
     }
 }
