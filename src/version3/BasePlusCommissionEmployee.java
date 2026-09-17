@@ -31,7 +31,7 @@ public class BasePlusCommissionEmployee extends CommissionEmployee {
 
     public void displayBasePlusCommissionEmployee() {
         displayCommissionEmployee();
-        System.out.printf("Base Salary: \u20b1%.2f%n", baseSalary);
+        System.out.printf("Base Salary: ₱%.2f%n", baseSalary);
     }
 
     @Override
