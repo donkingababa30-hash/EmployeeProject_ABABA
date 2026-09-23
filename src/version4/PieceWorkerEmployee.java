@@ -9,14 +9,13 @@ public class PieceWorkerEmployee extends Employee {
     public PieceWorkerEmployee() {
         super();
         this.totalPiecesFinished = 0;
-        this.ratePerPiece = 0.0;
+        this.ratePerPiece = 0;
     }
 
-    public PieceWorkerEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired,
-                               int totalPiecesFinished, double ratePerPiece) {
+    public PieceWorkerEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired, int totalPiecesFinished, double ratePerPiece) {
         super(empID, empName, birthDate, dateHired);
-        setTotalPiecesFinished(totalPiecesFinished);
-        setRatePerPiece(ratePerPiece);
+        this.totalPiecesFinished = totalPiecesFinished;
+        this.ratePerPiece = ratePerPiece;
     }
 
     public int getTotalPiecesFinished() {
@@ -24,7 +23,9 @@ public class PieceWorkerEmployee extends Employee {
     }
 
     public void setTotalPiecesFinished(int totalPiecesFinished) {
-        this.totalPiecesFinished = (totalPiecesFinished >= 0) ? totalPiecesFinished : 0;
+        if(totalPiecesFinished>=0){
+            this.totalPiecesFinished = totalPiecesFinished;
+        }
     }
 
     public double getRatePerPiece() {
@@ -32,43 +33,55 @@ public class PieceWorkerEmployee extends Employee {
     }
 
     public void setRatePerPiece(double ratePerPiece) {
-        this.ratePerPiece = (ratePerPiece >= 0) ? ratePerPiece : 0;
+        if(ratePerPiece>=0){
+            this.ratePerPiece = ratePerPiece;
+        }
     }
 
-    @Override
-    public double computeSalary(int currentMonth) {
-        double basePay = (totalPiecesFinished * ratePerPiece)
-                + ((totalPiecesFinished / 100) * (10 * ratePerPiece));
-        return basePay + super.computeSalary(currentMonth);
+    public double computeSalary(int currentMonth){
+        double basePay;
+        if(totalPiecesFinished>100){
+            basePay = (totalPiecesFinished*ratePerPiece) + (totalPiecesFinished/100)*(10*ratePerPiece);
+        }
+        else{
+            basePay = totalPiecesFinished*ratePerPiece;
+        }
+        if(getBirthDate().getMonth()==currentMonth){
+            basePay += 5000.00;
+        }
+        return basePay;
     }
 
-    public void displayPieceWorkerEmployee() {
-        displayEmployee();
-        System.out.printf("Pieces Finished: %d | Rate/Piece: ₱%.2f%n", totalPiecesFinished, ratePerPiece);
+    public double computeSalary(){
+        return computeSalary(-1);
+    }
+
+    public void displayPieceWorkerEmployee(){
+        super.displayEmployee();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Pieces Finished: ").append(totalPiecesFinished).append(" | ");
+        sb.append("Rate Per Piece: ₱").append(String.format("%,.2f", ratePerPiece));
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "PieceWorkerEmployee[ID: %d, Name: %s, DOB: %s, Hired: %s, Pieces: %d, Rate: ₱%.2f, Total Salary: ₱%.2f]",
-                getEmpID(), getEmpName().getFullName(), getBirthDate().getFormattedDate(),
-                getDateHired().getFormattedDate(), totalPiecesFinished, ratePerPiece, computeSalary());
+        StringBuilder sb = new StringBuilder();
+        sb.append("PieceWorkerEmployee[").append(super.toString());
+        sb.append(", Pieces: ").append(totalPiecesFinished);
+        sb.append(", Rate: ₱").append(String.format("%,.2f", ratePerPiece));
+        sb.append(", Total Salary: ₱").append(String.format("%,.2f", computeSalary()));
+        sb.append(']');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (!(obj instanceof PieceWorkerEmployee)) {
+        if(!super.equals(obj)){
             return false;
         }
         PieceWorkerEmployee other = (PieceWorkerEmployee) obj;
-        return totalPiecesFinished == other.totalPiecesFinished
-                && Double.compare(ratePerPiece, other.ratePerPiece) == 0;
+        return totalPiecesFinished == other.totalPiecesFinished && ratePerPiece == other.ratePerPiece;
     }
 
     @Override

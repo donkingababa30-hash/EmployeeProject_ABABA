@@ -15,7 +15,7 @@ public class EmployeeRoster {
         this.count=0;
     }
 
-    boolean addEmployee(Employee emp){
+    public boolean addEmployee(Employee emp){
         if(count<max){
             empList[count]=emp;
             count++;
@@ -24,7 +24,7 @@ public class EmployeeRoster {
         return false;
     }
 
-    Employee removeEmployee(int empID){
+    public Employee removeEmployee(int empID){
         for(int i=0;i<count;i++){
             if(empList[i].getEmpID() == empID){
                 Employee removed = empList[i];
@@ -39,7 +39,7 @@ public class EmployeeRoster {
         return null;
     }
 
-    Employee searchEmployee(int empID){
+    public Employee searchEmployee(int empID){
         for(int i=0;i<count;i++){
             if(empList[i].getEmpID() == empID){
                 return empList[i];
@@ -48,7 +48,7 @@ public class EmployeeRoster {
         return null;
     }
 
-    int countHE(){
+    public int countHE(){
         int HourlyEmployees=0;
         for(int i=0;i<count;i++){
             if(empList[i] instanceof HourlyEmployee){
@@ -58,7 +58,7 @@ public class EmployeeRoster {
         return HourlyEmployees;
     }
 
-    int countPWE(){
+    public int countPWE(){
         int pwEmployees=0;
         for(int i=0;i<count;i++){
             if(empList[i] instanceof PieceWorkerEmployee){
@@ -68,7 +68,7 @@ public class EmployeeRoster {
         return pwEmployees;
     }
 
-    int countCE(){
+    public int countCE(){
         int ComissionEmployees=0;
         for(int i=0;i<count;i++){
             if(empList[i] instanceof CommissionEmployee && !(empList[i] instanceof BasePlusCommissionEmployee)){
@@ -78,7 +78,7 @@ public class EmployeeRoster {
         return ComissionEmployees;
     }
 
-    int countBPCE(){
+    public int countBPCE(){
         int bpEmployees=0;
         for(int i=0;i<count;i++){
             if(empList[i] instanceof BasePlusCommissionEmployee){
@@ -88,7 +88,7 @@ public class EmployeeRoster {
         return bpEmployees;
     }
 
-    void displayHE(){
+    public void displayHE(){
         for(int i=0;i<count;i++){
             if(empList[i] instanceof HourlyEmployee){
                 HourlyEmployee he=(HourlyEmployee) empList[i];
@@ -97,7 +97,7 @@ public class EmployeeRoster {
         }
     }
 
-    void displayPWE(){
+    public void displayPWE(){
         for(int i=0;i<count;i++){
             if(empList[i] instanceof PieceWorkerEmployee){
                 PieceWorkerEmployee pwe=(PieceWorkerEmployee) empList[i];
@@ -106,16 +106,16 @@ public class EmployeeRoster {
         }
     }
 
-    void displayCE(){
+    public void displayCE(){
         for(int i=0;i<count;i++){
-            if(empList[i] instanceof CommissionEmployee){
+            if(empList[i] instanceof CommissionEmployee && !(empList[i] instanceof BasePlusCommissionEmployee)){
                 CommissionEmployee ce=(CommissionEmployee) empList[i];
                 ce.displayCommissionEmployee();
             }
         }
     }
 
-    void displayBPCE(){
+    public void displayBPCE(){
         for(int i=0;i<count;i++){
             if(empList[i] instanceof BasePlusCommissionEmployee){
                 BasePlusCommissionEmployee bpce=(BasePlusCommissionEmployee) empList[i];
@@ -124,8 +124,8 @@ public class EmployeeRoster {
         }
     }
 
-    void displayAllEmployees(){
-        for(int i=0;i<count-1;i++){
+    public void displayAllEmployees(){
+        for(int i=0;i<count;i++){
             StringBuilder sb = new StringBuilder();
             sb.append("ID: ").append(empList[i].getEmpID()).append(" | ");
             sb.append("Name: ").append(empList[i].getEmpName()).append(" | ");
@@ -133,8 +133,66 @@ public class EmployeeRoster {
             System.out.println(sb.toString());
         }
     }
-    void displayPayroll(int currentMonth){
 
+    public int getCount() {
+        return count;
     }
 
+    public int getMax() {
+        return max;
+    }
+
+    public void displayPayroll(int currentMonth){
+        for(int i=0; i<count; i++){
+            Employee emp = empList[i];
+            StringBuilder sb = new StringBuilder();
+
+            if(emp instanceof HourlyEmployee){
+                HourlyEmployee he = (HourlyEmployee) emp;
+                double salary = he.computeSalary(currentMonth);
+                boolean bonus = he.getBirthDate().getMonth() == currentMonth;
+                sb.append("[Hourly] ID: ").append(he.getEmpID());
+                sb.append(" | Name: ").append(he.getEmpName());
+                sb.append(" | Salary: ₱").append(String.format("%,.2f", salary));
+                if(bonus){
+                    sb.append(" (Birthday Bonus Applied)");
+                }
+            }
+            else if(emp instanceof BasePlusCommissionEmployee){
+                BasePlusCommissionEmployee bpce = (BasePlusCommissionEmployee) emp;
+                double salary = bpce.computeSalary(currentMonth);
+                boolean bonus = bpce.getBirthDate().getMonth() == currentMonth;
+                sb.append("[Base Plus Commission] ID: ").append(bpce.getEmpID());
+                sb.append(" | Name: ").append(bpce.getEmpName());
+                sb.append(" | Salary: ₱").append(String.format("%,.2f", salary));
+                if(bonus){
+                    sb.append(" (Birthday Bonus Applied)");
+                }
+            }
+            else if(emp instanceof CommissionEmployee){
+                CommissionEmployee ce = (CommissionEmployee) emp;
+                double salary = ce.computeSalary(currentMonth);
+                boolean bonus = ce.getBirthDate().getMonth() == currentMonth;
+                sb.append("[Commission] ID: ").append(ce.getEmpID());
+                sb.append(" | Name: ").append(ce.getEmpName());
+                sb.append(" | Salary: ₱").append(String.format("%,.2f", salary));
+                if(bonus){
+                    sb.append(" (Birthday Bonus Applied)");
+                }
+            }
+            else if(emp instanceof PieceWorkerEmployee){
+                PieceWorkerEmployee pwe = (PieceWorkerEmployee) emp;
+                double salary = pwe.computeSalary(currentMonth);
+                boolean bonus = pwe.getBirthDate().getMonth() == currentMonth;
+                sb.append("[Piece Worker] ID: ").append(pwe.getEmpID());
+                sb.append(" | Name: ").append(pwe.getEmpName());
+                sb.append(" | Salary: ₱").append(String.format("%,.2f", salary));
+                if(bonus){
+                    sb.append(" (Birthday Bonus Applied)");
+                }
+            }
+            System.out.println(sb.toString());
+        }
+    }
 }
+

@@ -3,7 +3,7 @@ package version4;
 import java.util.Objects;
 
 public class MyDate implements Cloneable {
-    private static final String[] MONTH_NAMES = {
+    private static final String[] monthNames = {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
@@ -18,9 +18,15 @@ public class MyDate implements Cloneable {
         this.year = 1900;
     }
 
-    public MyDate(int month, int day, int year) {
-        setMonth(month);
-        setDay(day);
+    public MyDate(int month, int year) {
+        this.day = 1;
+        this.month = month;
+        this.year = year;
+    }
+
+    public MyDate(int day, int month, int year) {
+        this.day = day;
+        this.month = month;
         this.year = year;
     }
 
@@ -29,7 +35,9 @@ public class MyDate implements Cloneable {
     }
 
     public void setDay(int day) {
-        this.day = (day >= 1 && day <= 31) ? day : 1;
+        if(day>=1 && day<=31){
+            this.day = day;
+        }
     }
 
     public int getMonth() {
@@ -37,7 +45,9 @@ public class MyDate implements Cloneable {
     }
 
     public void setMonth(int month) {
-        this.month = (month >= 1 && month <= 12) ? month : 1;
+        if(month>=1 && month<=12){
+            this.month = month;
+        }
     }
 
     public int getYear() {
@@ -45,41 +55,39 @@ public class MyDate implements Cloneable {
     }
 
     public void setYear(int year) {
-        this.year = year;
+        if(year>0){
+            this.year = year;
+        }
     }
 
-    public String getFormattedDate() {
+    public void displayDate(){
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%02d", day));
-        sb.append(" ");
-        sb.append((month >= 1 && month <= 12) ? MONTH_NAMES[month - 1] : "N/A");
-        sb.append(" ");
-        sb.append(year);
-        return sb.toString();
-    }
-
-    public void displayDate() {
-        System.out.println("Date: " + getFormattedDate());
+        sb.append("Date: ").append(toString());
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("MyDate{");
-        sb.append("day=").append(day);
-        sb.append(", month=").append(month);
-        sb.append(", year=").append(year);
-        sb.append(", formattedDate=").append(getFormattedDate());
-        sb.append('}');
+        sb.append(String.format("%02d", day));
+        sb.append(" ");
+        if(month>=1 && month<=12){
+            sb.append(monthNames[month-1]);
+        }
+        else{
+            sb.append("N/A");
+        }
+        sb.append(" ");
+        sb.append(year);
         return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if(this == obj){
             return true;
         }
-        if (!(obj instanceof MyDate)) {
+        if(obj == null || getClass() != obj.getClass()){
             return false;
         }
         MyDate other = (MyDate) obj;
@@ -96,7 +104,7 @@ public class MyDate implements Cloneable {
         try {
             return (MyDate) super.clone();
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError("MyDate did not implement Cloneable", e);
+            throw new AssertionError(e);
         }
     }
 }

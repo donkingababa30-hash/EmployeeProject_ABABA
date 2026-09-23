@@ -7,7 +7,7 @@ public class CommissionEmployee extends Employee {
 
     public CommissionEmployee() {
         super();
-        this.totalSale = 0.0;
+        this.totalSale = 0;
     }
 
     public CommissionEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired, double totalSale) {
@@ -20,53 +20,63 @@ public class CommissionEmployee extends Employee {
     }
 
     public void setTotalSale(double totalSale) {
-        this.totalSale = (totalSale >= 0) ? totalSale : 0;
-    }
-
-    public double getCommissionRate() {
-        if (totalSale >= 500000) {
-            return 0.20;
-        } else if (totalSale >= 100000) {
-            return 0.15;
-        } else if (totalSale >= 50000) {
-            return 0.10;
-        } else {
-            return 0.05;
+        if(totalSale>=0){
+            this.totalSale = totalSale;
         }
     }
 
-    @Override
-    public double computeSalary(int currentMonth) {
-        double basePay = totalSale * getCommissionRate();
-        return basePay + super.computeSalary(currentMonth);
+    public double getCommissionRate(){
+        if(totalSale<50000){
+            return 0.05;
+        }
+        else if(totalSale<100000){
+            return 0.10;
+        }
+        else if(totalSale<500000){
+            return 0.15;
+        }
+        else{
+            return 0.20;
+        }
     }
 
-    public void displayCommissionEmployee() {
-        displayEmployee();
-        System.out.printf("Total Sale: ₱%.2f | Commission Rate: %.0f%%%n", totalSale, getCommissionRate() * 100);
+    public double computeSalary(int currentMonth){
+        double basePay = totalSale*getCommissionRate();
+        if(getBirthDate().getMonth()==currentMonth){
+            basePay += 5000.00;
+        }
+        return basePay;
+    }
+
+    public double computeSalary(){
+        return computeSalary(-1);
+    }
+
+    public void displayCommissionEmployee(){
+        super.displayEmployee();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total Sales: ₱").append(String.format("%,.2f", totalSale)).append(" | ");
+        sb.append("Commission Rate: ").append(String.format("%.0f", getCommissionRate()*100)).append("%");
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "CommissionEmployee[ID: %d, Name: %s, DOB: %s, Hired: %s, Sale: ₱%.2f, Rate: %.0f%%, Total Salary: ₱%.2f]",
-                getEmpID(), getEmpName().getFullName(), getBirthDate().getFormattedDate(),
-                getDateHired().getFormattedDate(), totalSale, getCommissionRate() * 100, computeSalary());
+        StringBuilder sb = new StringBuilder();
+        sb.append("CommissionEmployee[").append(super.toString());
+        sb.append(", Total Sales: ₱").append(String.format("%,.2f", totalSale));
+        sb.append(", Total Salary: ₱").append(String.format("%,.2f", computeSalary()));
+        sb.append(']');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (!(obj instanceof CommissionEmployee)) {
+        if(!super.equals(obj)){
             return false;
         }
         CommissionEmployee other = (CommissionEmployee) obj;
-        return Double.compare(totalSale, other.totalSale) == 0;
+        return totalSale == other.totalSale;
     }
 
     @Override

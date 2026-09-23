@@ -7,11 +7,10 @@ public class BasePlusCommissionEmployee extends CommissionEmployee {
 
     public BasePlusCommissionEmployee() {
         super();
-        this.baseSalary = 0.0;
+        this.baseSalary = 0;
     }
 
-    public BasePlusCommissionEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired,
-                                      double totalSale, double baseSalary) {
+    public BasePlusCommissionEmployee(int empID, Name empName, MyDate birthDate, MyDate dateHired, double totalSale, double baseSalary) {
         super(empID, empName, birthDate, dateHired, totalSale);
         this.baseSalary = baseSalary;
     }
@@ -21,40 +20,47 @@ public class BasePlusCommissionEmployee extends CommissionEmployee {
     }
 
     public void setBaseSalary(double baseSalary) {
-        this.baseSalary = (baseSalary >= 0) ? baseSalary : 0;
+        if(baseSalary>=0){
+            this.baseSalary = baseSalary;
+        }
     }
 
-    @Override
-    public double computeSalary(int currentMonth) {
+    public double computeSalary(int currentMonth){
         return baseSalary + super.computeSalary(currentMonth);
     }
 
-    public void displayBasePlusCommissionEmployee() {
-        displayCommissionEmployee();
-        System.out.printf("Base Salary: ₱%.2f%n", baseSalary);
+    public double computeSalary(){
+        return baseSalary + super.computeSalary();
+    }
+
+    public void displayBasePlusCommissionEmployee(){
+        super.displayCommissionEmployee();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Base Salary: ₱").append(String.format("%,.2f", baseSalary));
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "BasePlusCommissionEmployee[ID: %d, Name: %s, DOB: %s, Hired: %s, Sale: ₱%.2f, Base: ₱%.2f, Total Salary: ₱%.2f]",
-                getEmpID(), getEmpName().getFullName(), getBirthDate().getFormattedDate(),
-                getDateHired().getFormattedDate(), getTotalSale(), baseSalary, computeSalary());
+        StringBuilder sb = new StringBuilder();
+        sb.append("BasePlusCommissionEmployee[ID: ").append(getEmpID());
+        sb.append(", Name: ").append(getEmpName());
+        sb.append(", DOB: ").append(getBirthDate());
+        sb.append(", Hired: ").append(getDateHired());
+        sb.append(", Total Sales: ₱").append(String.format("%,.2f", getTotalSale()));
+        sb.append(", Base Salary: ₱").append(String.format("%,.2f", baseSalary));
+        sb.append(", Total Salary: ₱").append(String.format("%,.2f", computeSalary()));
+        sb.append(']');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (!(obj instanceof BasePlusCommissionEmployee)) {
+        if(!super.equals(obj)){
             return false;
         }
         BasePlusCommissionEmployee other = (BasePlusCommissionEmployee) obj;
-        return Double.compare(baseSalary, other.baseSalary) == 0;
+        return baseSalary == other.baseSalary;
     }
 
     @Override

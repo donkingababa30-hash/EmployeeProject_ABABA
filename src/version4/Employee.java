@@ -54,44 +54,38 @@ public class Employee implements Cloneable {
         this.dateHired = dateHired;
     }
 
-    public double computeSalary(int currentMonth) {
-        double bonus = 0.0;
-        if (birthDate != null && birthDate.getMonth() == currentMonth) {
-            bonus = 5000.0;
-        }
-        return bonus;
-    }
-
-    public double computeSalary() {
-        return computeSalary(-1);
-    }
-
-    public void displayEmployee() {
-        System.out.println("Employee ID: " + empID);
-        System.out.println("Name: " + empName.getFullName());
-        System.out.println("Birth Date: " + birthDate.getFormattedDate());
-        System.out.println("Hire Date: " + dateHired.getFormattedDate());
+    public void displayEmployee(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(empID).append(" | ");
+        sb.append("Name: ").append(empName).append(" | ");
+        sb.append("DOB: ").append(birthDate).append(" | ");
+        sb.append("Hired: ").append(dateHired);
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
-        return String.format("Employee[ID: %d, Name: %s, DOB: %s, Hired: %s]",
-                empID, empName.getFullName(), birthDate.getFormattedDate(), dateHired.getFormattedDate());
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(empID);
+        sb.append(", Name: ").append(empName);
+        sb.append(", DOB: ").append(birthDate);
+        sb.append(", Hired: ").append(dateHired);
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if(this == obj){
             return true;
         }
-        if (!(obj instanceof Employee)) {
+        if(obj == null || getClass() != obj.getClass()){
             return false;
         }
         Employee other = (Employee) obj;
-        return empID == other.empID
-                && Objects.equals(empName, other.empName)
-                && Objects.equals(birthDate, other.birthDate)
-                && Objects.equals(dateHired, other.dateHired);
+        return empID == other.empID &&
+                empName.equals(other.empName) &&
+                birthDate.equals(other.birthDate) &&
+                dateHired.equals(other.dateHired);
     }
 
     @Override
@@ -108,7 +102,7 @@ public class Employee implements Cloneable {
             cloned.dateHired = this.dateHired.clone();
             return cloned;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Employee did not implement Cloneable", e);
+            throw new AssertionError(e);
         }
     }
 }

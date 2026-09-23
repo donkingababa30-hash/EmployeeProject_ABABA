@@ -68,55 +68,47 @@ public class Name implements Cloneable {
         this.suffix = suffix;
     }
 
-    public String getFullName() {
+    public String getFullName(){
         StringBuilder sb = new StringBuilder();
-        sb.append(lastName).append(", ").append(firstName);
-        if (middleName != null && !middleName.isEmpty() && !middleName.equalsIgnoreCase("N/A")) {
-            sb.append(" ").append(middleName.charAt(0)).append(".");
+        sb.append(lastName);
+        sb.append(", ");
+        sb.append(firstName);
+        if(middleName != null && !middleName.isEmpty() && !middleName.equalsIgnoreCase("N/A")){
+            sb.append(" ");
+            sb.append(middleName.charAt(0));
+            sb.append(".");
         }
-        if (suffix != null && !suffix.isEmpty()) {
-            sb.append(" ").append(suffix);
+        if(suffix != null && !suffix.isEmpty()){
+            sb.append(" ");
+            sb.append(suffix);
         }
         return sb.toString();
     }
 
-    public void displayName() {
-        System.out.println("Name: " + getFullName());
+    public void displayName(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Name: ").append(getFullName());
+        System.out.println(sb.toString());
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Name{");
-        sb.append("firstName='").append(firstName).append('\'');
-        sb.append(", middleName='").append(middleName).append('\'');
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", suffix='").append(suffix).append('\'');
-        sb.append(", fullName=").append(getFullName());
-        sb.append('}');
-        return sb.toString();
+        return getFullName();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if(this == obj){
             return true;
         }
-        if (!(obj instanceof Name)) {
+        if(obj == null || getClass() != obj.getClass()){
             return false;
         }
         Name other = (Name) obj;
-        return safeEqualsIgnoreCase(firstName, other.firstName)
-                && safeEqualsIgnoreCase(middleName, other.middleName)
-                && safeEqualsIgnoreCase(lastName, other.lastName)
-                && safeEqualsIgnoreCase(suffix, other.suffix);
-    }
-
-    private boolean safeEqualsIgnoreCase(String a, String b) {
-        if (a == null) {
-            return b == null;
-        }
-        return a.equalsIgnoreCase(b);
+        return firstName.equalsIgnoreCase(other.firstName) &&
+                middleName.equalsIgnoreCase(other.middleName) &&
+                lastName.equalsIgnoreCase(other.lastName) &&
+                suffix.equalsIgnoreCase(other.suffix);
     }
 
     @Override
@@ -129,7 +121,7 @@ public class Name implements Cloneable {
         try {
             return (Name) super.clone();
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Name did not implement Cloneable", e);
+            throw new AssertionError(e);
         }
     }
 }
